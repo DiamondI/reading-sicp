@@ -16,7 +16,7 @@
 
 (define (simpson-rule f a b n)
   (define (h a b n)
-     (/ (- b a) n))
+     (/ (- b a) (* 1.0 n)))
   (define (simpson-term x)
     (cond ((or (= x 0) (= x n))
           (f (+ a (* x (h a b n)))))
