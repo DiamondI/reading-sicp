@@ -2,7 +2,7 @@
 
 ;Exercise1.38
 
-(#%require "Exercise1.37.rkt" (only-in sicp [cont-frac-iterative cont-frac]))
+(#%require "Exercise1.37.rkt")
 
 ;use Euler’s expansion to get approximation of e
 
