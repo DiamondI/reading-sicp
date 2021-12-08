@@ -1,4 +1,6 @@
-#lang sicp
+#lang racket
+
+(require sicp)
 
 ;Exercise1.36
 
@@ -22,8 +24,10 @@
 (define (f x)
   (/ (log 1000) (log x)))
 
-;without average damping
-(fixed-point f 2) ;34 steps
+(module+ main
+  ;without average damping
+  (fixed-point f 2) ;34 steps
 
-;with average damping
-(fixed-point (lambda (x) (* (/ 1.0 2) (+ x (/ (log 1000) (log x))))) 2) ;9 steps
+  ;with average damping
+  (fixed-point (lambda (x) (* (/ 1.0 2) (+ x (/ (log 1000) (log x))))) 2) ;9 steps
+  )
