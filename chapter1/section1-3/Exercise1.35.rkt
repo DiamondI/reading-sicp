@@ -1,8 +1,11 @@
-#lang sicp
+#lang racket
+
+(require sicp)
 
 ;Exercise1.35
 
 ;fixed-point from textbook
+(provide fixed-point)
 (define tolerance 0.00001)
 
 (define (fixed-point f first-guess)
@@ -16,8 +19,10 @@
           (try next))))
   (try first-guess))
 
-;test cos
-(fixed-point cos 1.0) ;0.7390822985224024
+(module+ main
+  ;test cos
+  (fixed-point cos 1.0) ;0.7390822985224024
 
-;compute x -> 1 + 1/x
-(fixed-point (lambda (x) (+ 1 (/ 1 x))) 1.0) ;1.6180327868852458
+  ;compute x -> 1 + 1/x
+  (fixed-point (lambda (x) (+ 1 (/ 1 x))) 1.0) ;1.6180327868852458
+  )
