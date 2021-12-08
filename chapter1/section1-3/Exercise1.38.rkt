@@ -6,7 +6,7 @@
 
 ;use Euler’s expansion to get approximation of e
 
-(+ 2 (cont-frac-iterative (lambda (i) 1.0)
+(+ 2 (cont-frac (lambda (i) 1.0)
                           (lambda (i)
                             (if (= (remainder (- i 2) 3) 0)
                                 (* (+ 1 (quotient i 3)) 2)
