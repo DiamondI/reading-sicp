@@ -3,8 +3,8 @@
 ;Exercise1.37
 
 ;cont-frac iterative
-(#%provide cont-frac-iterative)
-(#%require sicp)
+(provide (rename-out [cont-frac-iterative cont-frac]))
+(require sicp)
 (define (cont-frac-iterative n d k)
   (define (iter i result)
     (if (< i 1)
