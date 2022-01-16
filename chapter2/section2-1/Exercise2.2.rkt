@@ -3,6 +3,7 @@
 (require sicp)
 
 ;Exercise2.1
+(provide print-point make-point make-segment x-point y-point)
 
 (define (print-point p)
     (newline)
@@ -34,7 +35,7 @@
 (define (midpoint-segment segment)
     (let ((start (start-segment segment))
           (end (end-segment segment)))
-          (make-point (/ (+ (x-point start) (x-point end)) 2) (/ (+ (y-point start) (+ (y-point end))) 2))
+      (make-point (/ (+ (x-point start) (x-point end)) 2) (/ (+ (y-point start) (+ (y-point end))) 2))
           ))
 
 (module+ main
