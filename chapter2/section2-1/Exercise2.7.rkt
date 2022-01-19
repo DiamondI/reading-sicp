@@ -1,7 +1,7 @@
 #lang racket
 
 (require sicp)
-(provide make-interval add-interval mul-interval div-interval lower-bound upper-bound print-interval)
+(provide (all-defined-out))
 
 (define (make-interval a b) (cons a b))
 
