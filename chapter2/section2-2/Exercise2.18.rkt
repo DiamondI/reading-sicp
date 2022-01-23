@@ -14,7 +14,7 @@
   (define (reverse l res)
     (if (null? l)
         res
-        (reverse (cdr l) (append (cons (car l) nil) res))))
+        (reverse (cdr l) (cons (car l) res))))
   (reverse l nil))
 
 (module+ main
