@@ -6,7 +6,7 @@
   (if (not (null? items))
       ((lambda (x)
         (x (car items))
-        (for-each x (cdr items)))procedure)))
+        (for-each x (cdr items))) procedure)))
 
 (module+ main
   (for-each (lambda (x)
