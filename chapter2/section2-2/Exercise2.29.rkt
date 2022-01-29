@@ -1,0 +1,163 @@
+#lang racket
+
+(require sicp)
+
+(define (make-mobile left right)
+  (list left right))
+
+(define (make-branch length structure)
+  (list length structure))
+
+(define (left-branch mobile)
+  (car mobile))
+
+(define (right-branch mobile)
+  (cadr mobile))
+
+(define (branch-length branch)
+  (car branch))
+
+(define (branch-structure branch)
+  (cadr branch))
+
+(define (total-weight mobile)
+  (cond ((null? mobile) 0)
+        ((not (pair? mobile)) mobile)
+        (else
+         (let ((left (left-branch mobile))
+               (right (right-branch mobile)))
+           (let ((left-length (branch-length left))
+                 (left-structure (branch-structure left))
+                 (right-length (branch-length right))
+                 (right-structure (branch-structure right)))
+             (+ (total-weight left-structure) (total-weight right-structure)))))))
+
+
+;第一版，含有大量的重复计算
+(define (balance2? mobile)
+  (let ((left (left-branch mobile))
+        (right (right-branch mobile)))
+    (let ((left-length (branch-length left))
+          (left-structure (branch-structure left))
+          (right-length (branch-length right))
+          (right-structure (branch-length right)))
+      (cond ((and (not (pair? left-structure)) (not (pair? right-structure))) ; both are weights
+             (= (* left-length left-structure) (* right-length right-structure)))
+            ((and (not (pair? left-structure)) (pair? right-structure)) ; right is mobile, check if right is balance first
+             (if (not (balance? right-structure)) ; if not balance, return false, otherwise, get the weight of right mobile
+                 #f
+                 (= (* left-length left-structure) (* right-length (total-weight right-structure)))))
+            ((and (pair? left-structure) (not (pair? right-structure))) ; left is mobile, similar to above
+             (if (not (balance? right-structure))
+                 #f
+                 (= (* left-length (total-weight left-structure)) (* right-length right-structure))))
+            ((and (pair? left-structure) (pair? right-structure))
+             (if (or (not (balance? left-structure)) (not (balance? right-structure)))
+                 #f
+                 (= (* left-length (total-weight left-structure)) (* right-length (total-weight right-structure)))))))))
+
+(define (balance? mobile)
+  (define (helper mobile)
+    (cond ((null? mobile) (cons #t 0))
+          ((not (pair? mobile)) (cons #t mobile))
+          (else
+           (let ((left (left-branch mobile))
+               (right (right-branch mobile)))
+             (let ((left-length (branch-length left))
+                   (left-structure (branch-structure left))
+                   (right-length (branch-length right))
+                   (right-structure (branch-structure right)))
+               (let ((left-pair (helper left-structure))
+                     (right-pair (helper right-structure)))
+                 (let ((left-balance? (car left-pair))
+                       (left-weight (cdr left-pair))
+                       (right-balance? (car right-pair))
+                       (right-weight (cdr right-pair)))
+                   (cons
+                    (if (and left-balance? right-balance? (= (* left-length left-weight) (* right-length right-weight)))
+                        #t
+                        #f)
+                    (+ left-weight right-weight)))))))))
+  (car (helper mobile)))
+
+
+(module+ main
+  (define branch1 (make-branch 10 10))
+  (define branch2 (make-branch 5 5))
+  (define mobile1 (make-mobile branch1 branch2))
+  (define branch3 (make-branch 2 mobile1))
+  (define mobile2 (make-mobile branch1 branch3))
+  (display "branch1: ") (newline)
+  (display branch1) (newline)
+  (display "branch2: ") (newline)
+  (display branch2) (newline)
+  (display "branch3: ") (newline)
+  (display branch3) (newline)
+  (display "mobile1: ") (newline)
+  (display mobile1) (newline)
+  (display "mobile2: ") (newline)
+  (display mobile2) (newline)
+  (define m1left (left-branch mobile1))
+  (define m1right (right-branch mobile1))
+  (display "m1left: ") (newline)
+  (display m1left) (newline)
+  (display "m1right: ") (newline)
+  (display m1right) (newline)
+  (display "(m1left m1right): ") (newline)
+  (display (make-mobile m1left m1right)) (newline)
+  (define m2left (left-branch mobile2))
+  (define m2right (right-branch mobile2))
+  (display "m2left: ") (newline)
+  (display m2left) (newline)
+  (display "m2right: ") (newline)
+  (display m2right) (newline)
+  (display "(m2left m2right): ") (newline)
+  (display (make-mobile m2left m2right)) (newline)
+  (define branch1-length (branch-length branch1))
+  (define branch1-structure (branch-structure branch1))
+  (display "branch1-length: ") (newline)
+  (display branch1-length) (newline)
+  (display "branch1-structure: ") (newline)
+  (display branch1-structure) (newline)
+  (display "(branch1-length branch1-structure): ") (newline)
+  (display (make-branch branch1-length branch1-structure)) (newline)
+  (define branch2-length (branch-length branch2))
+  (define branch2-structure (branch-structure branch2))
+  (display "branch2-length: ") (newline)
+  (display branch2-length) (newline)
+  (display "branch2-structure: ") (newline)
+  (display branch2-structure) (newline)
+  (display "(branch2-length branch2-structure): ") (newline)
+  (display (make-branch branch2-length branch2-structure)) (newline)
+  (define branch3-length (branch-length branch3))
+  (define branch3-structure (branch-structure branch3))
+  (display "branch3-length: ") (newline)
+  (display branch3-length) (newline)
+  (display "branch3-structure: ") (newline)
+  (display branch3-structure) (newline)
+  (display "(branch3-length branch3-structure): ") (newline)
+  (display (make-branch branch3-length branch3-structure)) (newline)
+  
+  (display "------") (newline)
+  (display "total-weight of mobile2: ") (newline)
+  (display (total-weight mobile2)) (newline) ; 10 + 5 + 10 = 25
+
+  (display "------") (newline)
+  (define start1 (runtime))
+  (display (balance? mobile2)) (newline)
+  (display "balance? time used: ") (newline)
+  (display (- (runtime) start1)) (newline)
+  (define start2 (runtime))
+  (display (balance? (make-mobile branch1 branch1))) (newline)
+  (display "balance? time used: ") (newline)
+  (display (- (runtime) start2)) (newline)
+  
+  (define start3 (runtime))
+  (display (balance2? mobile2)) (newline)
+  (display "balance2? time used: ") (newline)
+  (display (- (runtime) start3)) (newline)
+  (define start4 (runtime))
+  (display (balance2? (make-mobile branch1 branch1))) (newline)
+  (display "balance2? time used: ") (newline)
+  (display (- (runtime) start4)) (newline)
+  )
