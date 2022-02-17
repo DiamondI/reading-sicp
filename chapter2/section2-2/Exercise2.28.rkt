@@ -1,6 +1,7 @@
 #lang racket
 
 (require sicp)
+(provide fringe)
 
 (define (fringe items)
   (cond ((null? items)
