@@ -1,6 +1,7 @@
 #lang racket
 
 (require sicp)
+(provide (all-defined-out))
 
 (define (make-vect x y)
   (list x y))
